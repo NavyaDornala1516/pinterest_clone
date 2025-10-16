@@ -1,0 +1,10 @@
+# Virtual environment folder
+venv/
+env/
+
+*/migrations/*.py
+*/migrations/*.pyc
+!*/migrations/__init__.py
+
+db.sqlite3
+staticfiles/

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Home | Pinterest Clone{% endblock %}
+
+{% block content %}
+<div class="card" style="width:450px;">
+  <h2>Welcome, {{ user.username }} 👋</h2>
+
+  {% if user.is_authenticated %}
+    <p>You’re now logged in to your Pinterest clone!</p>
+    <a href="{% url 'logout' %}">
+      <button>Logout</button>
+    </a>
+  {% else %}
+    <p>You are not logged in.</p>
+    <a href="{% url 'login' %}">Login</a>
+  {% endif %}
+</div>
+{% endblock %}
