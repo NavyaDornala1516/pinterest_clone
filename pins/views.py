@@ -3,11 +3,15 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Board, Pin
+from .forms import BoardForm, PinForm
 
 # Home Page (Protected)
-@login_required(login_url='login')
+@login_required
 def home(request):
-    return render(request, 'home.html')
+    pins = Pin.objects.all()
+    return render(request, 'home.html', {'pins': pins})
 
 # Register new user
 def register_user(request):
@@ -50,3 +54,36 @@ def logout_user(request):
     logout(request)
     messages.success(request, 'You have been logged out.')
     return redirect('login')
+
+@login_required
+def create_board(request):
+    if request.method == 'POST':
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            board = form.save(commit=False)
+            board.owner = request.user
+            board.save()
+            return redirect('board_list')
+    else:
+        form = BoardForm()
+    return render(request, 'pins/create_board.html', {'form': form})
+
+def board_list(request):
+    boards = Board.objects.all()
+    return render(request, 'pins/board_list.html', {'boards': boards})
+
+    
+@login_required
+def create_pin(request):
+    if request.method == 'POST':
+        form = PinForm(request.POST, request.FILES)
+        if form.is_valid():
+            pin = form.save(commit=False)
+            pin.created_by = request.user
+            pin.save()
+            messages.success(request, 'Pin created successfully!')
+            return redirect('home')
+    else:
+        form = PinForm()
+
+    return render(request, 'pins/create_pin.html', {'form': form})
