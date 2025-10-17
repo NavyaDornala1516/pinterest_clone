@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Board</title>
+</head>
+<body>
+    <h2>Create a New Board</h2>
+
+    <!-- Display Django messages if any -->
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: red;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        <label for="title">Board Title:</label><br>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" rows="4"></textarea><br><br>
+
+        <button type="submit">Create Board</button>
+    </form>
+
+    <br>
+    <a href="{% url 'boards_list' %}">Back to Boards</a>
+</body>
+</html>

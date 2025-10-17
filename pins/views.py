@@ -4,8 +4,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Board, Pin
 from .forms import BoardForm, PinForm
+from boards.models import Board
+from .models import Pin
 
 # Home Page (Protected)
 @login_required
@@ -14,7 +15,7 @@ def home(request):
     return render(request, 'home.html', {'pins': pins})
 
 # Register new user
-def register_user(request):
+def register(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
@@ -55,6 +56,7 @@ def logout_user(request):
     messages.success(request, 'You have been logged out.')
     return redirect('login')
 
+
 @login_required
 def create_board(request):
     if request.method == 'POST':
@@ -63,27 +65,39 @@ def create_board(request):
             board = form.save(commit=False)
             board.owner = request.user
             board.save()
-            return redirect('board_list')
+            return redirect('boards_list')
     else:
         form = BoardForm()
-    return render(request, 'pins/create_board.html', {'form': form})
+    return render(request, 'boards/create_board.html', {'form': form})
 
-def board_list(request):
-    boards = Board.objects.all()
-    return render(request, 'pins/board_list.html', {'boards': boards})
-
-    
 @login_required
 def create_pin(request):
+    boards = Board.objects.filter(owner=request.user)
+    if not boards.exists():
+        messages.error(request, "You need to create a board first!")
+        return redirect('create_board')
+
     if request.method == 'POST':
         form = PinForm(request.POST, request.FILES)
+        form.fields['board'].queryset = boards
         if form.is_valid():
             pin = form.save(commit=False)
-            pin.created_by = request.user
+            pin.user = request.user
             pin.save()
-            messages.success(request, 'Pin created successfully!')
             return redirect('home')
     else:
         form = PinForm()
+        form.fields['board'].queryset = boards
 
     return render(request, 'pins/create_pin.html', {'form': form})
+
+
+def board_list(request):
+    boards = Board.objects.all()
+    return render(request, 'boards/board_list.html', {'boards': boards})
+
+
+@login_required
+def pin_list(request):
+    pins = Pin.objects.filter(user=request.user)
+    return render(request, 'pins/pin_list.html', {'pins': pins})

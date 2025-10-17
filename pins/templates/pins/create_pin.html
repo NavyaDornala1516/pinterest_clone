@@ -2,17 +2,23 @@
 {% block title %}Create Pin | Pinterest Clone{% endblock %}
 {% block content %}
   <div class="card">
-    <h2>Create a New Pin</h2>
+    <!-- pins/templates/pins/create_pin.html -->
+<h2>Create Pin</h2>
 
-    {% for message in messages %}
-      <p class="message">{{ message }}</p>
-    {% endfor %}
+{% if messages %}
+  {% for message in messages %}
+    <p>
+      {{ message }}
+    </p>
+  {% endfor %}
+{% endif %}
 
-    <form method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Upload Pin</button>
-    </form>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload Pin</button>
+</form>
+
 
     <p style="margin-top:15px;">
       <a href="{% url 'home' %}">Back to Home</a>

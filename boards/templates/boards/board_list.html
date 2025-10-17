@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Boards</title>
+</head>
+<body>
+    <h2>All Boards</h2>
+    {% for board in boards %}
+        <div>
+            <h3>{{ board.title }}</h3>
+            <p>{{ board.description }}</p>
+        </div>
+    {% empty %}
+        <p>No boards created yet.</p>
+    {% endfor %}
+    
+    <a href="{% url 'create_board' %}">Create New Board</a>
+</body>
+</html>

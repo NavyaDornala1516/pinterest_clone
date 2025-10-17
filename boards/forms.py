@@ -1,6 +1,6 @@
 from django import forms
 from boards.models import Board
-from .models import Pin
+from pins.models import Pin
 
 class BoardForm(forms.ModelForm):
     class Meta:
