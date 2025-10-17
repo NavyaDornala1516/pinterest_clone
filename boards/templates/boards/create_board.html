@@ -1,33 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Board</title>
-</head>
-<body>
+{% extends 'boards/base.html' %}
+{% load static %}
+
+{% block title %}Create Board{% endblock %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/create_board.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="create-board-container">
     <h2>Create a New Board</h2>
 
-    <!-- Display Django messages if any -->
     {% if messages %}
-        {% for message in messages %}
-            <p style="color: red;">{{ message }}</p>
-        {% endfor %}
+      {% for message in messages %}
+        <p style="color: red;">{{ message }}</p>
+      {% endfor %}
     {% endif %}
 
-    <form method="POST">
-        {% csrf_token %}
-        
-        <label for="title">Board Title:</label><br>
-        <input type="text" id="title" name="title" required><br><br>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <label for="title">Board Title:</label><br>
+      <input type="text" id="title" name="title" required><br><br>
 
-        <label for="description">Description:</label><br>
-        <textarea id="description" name="description" rows="4"></textarea><br><br>
+      <label for="description">Description:</label><br>
+      <textarea id="description" name="description" rows="4"></textarea><br><br>
 
-        <button type="submit">Create Board</button>
+      <label for="cover_image">Cover Image:</label><br>
+      <input type="file" id="cover_image" name="cover_image"><br><br>
+
+      <button type="submit">Create Board</button>
     </form>
 
     <br>
     <a href="{% url 'boards_list' %}">Back to Boards</a>
-</body>
-</html>
+  </div>
+{% endblock %}
