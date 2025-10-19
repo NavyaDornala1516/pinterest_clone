@@ -1,0 +1,46 @@
+.create-board-container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.create-board-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #e60023;
+    text-align: center;
+}
+
+.create-board-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.create-board-container input,
+.create-board-container textarea {
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    font-family: inherit;
+    width: 100%;
+}
+
+.create-board-container button {
+    padding: 12px 20px;
+    background-color: #e60023;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.create-board-container button:hover {
+    background-color: #c5001f;
+}

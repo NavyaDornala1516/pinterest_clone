@@ -1,27 +1,32 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block title %}Create Pin | Pinterest Clone{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/create_pin.css' %}">
+{% endblock %}
 {% block content %}
-  <div class="card">
-    <!-- pins/templates/pins/create_pin.html -->
-<h2>Create Pin</h2>
+<div class="card">
+  <!-- pins/templates/pins/create_pin.html -->
+  <h2>Create Pin</h2>
 
-{% if messages %}
+  {% if messages %}
   {% for message in messages %}
-    <p>
-      {{ message }}
-    </p>
+  <p>
+    {{ message }}
+  </p>
   {% endfor %}
-{% endif %}
+  {% endif %}
 
-<form method="POST" enctype="multipart/form-data">
+  <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Upload Pin</button>
-</form>
+  </form>
 
 
-    <p style="margin-top:15px;">
-      <a href="{% url 'home' %}">Back to Home</a>
-    </p>
-  </div>
+  <p style="margin-top:15px;">
+    <a href="{% url 'home' %}">Back to Home</a>
+  </p>
+</div>
 {% endblock %}

@@ -6,8 +6,7 @@ def redirect_to_home(request):
     return redirect('home')
 
 urlpatterns = [
-    path('', redirect_to_home),
-    path('register/', views.register, name='register'),
+    path('', views.register, name='register'),
     path('home/', views.home, name='home'),
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),

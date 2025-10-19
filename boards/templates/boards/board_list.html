@@ -1,27 +1,28 @@
-{% extends 'boards/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %}All Boards{% endblock %}
+{% block title %}My Boards{% endblock %}
+
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'css/board_list.css' %}">
+<link rel="stylesheet" href="{% static 'css/board_list.css' %}">
 {% endblock %}
 
 {% block content %}
-  <h2>All Boards</h2>
+<div class="boards-header">
+  <h2>My Boards</h2>
+  <a class="create-board-btn" href="{% url 'create_board' %}">+ Create New Board</a>
+</div>
 
-  <div class="board-container">
-    {% for board in boards %}
-      <div class="board-card">
-        {% if board.cover_image %}
-          <img src="{{ board.cover_image.url }}" alt="{{ board.title }}" class="board-image">
-        {% endif %}
-        <div class="board-info">
-          <h3 class="board-title">{{ board.title }}</h3>
-          <p class="board-desc">{{ board.description }}</p>
-        </div>
-      </div>
-    {% empty %}
-      <p>No boards created yet.</p>
-    {% endfor %}
+<div class="board-grid">
+  {% for board in boards %}
+  <div class="board-card">
+    <div class="board-card-content">
+      <h3>{{ board.title }}</h3>
+      <p>{{ board.description|default:"No description" }}</p>
+    </div>
   </div>
+  {% empty %}
+  <p class="no-boards">You have no boards yet. Create one!</p>
+  {% endfor %}
+</div>
 {% endblock %}

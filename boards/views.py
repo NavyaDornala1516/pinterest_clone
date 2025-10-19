@@ -16,9 +16,8 @@ def create_board(request):
             messages.error(request, "Title is required.")
             return render(request, 'boards/create_board.html')
 
-        # Save the board
         Board.objects.create(title=title, description=description)
         messages.success(request, "Board created successfully!")
-        return redirect('boards_list')  # redirect to list page
+        return redirect('boards_list')  
 
     return render(request, 'boards/create_board.html')

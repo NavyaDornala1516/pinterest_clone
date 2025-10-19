@@ -8,24 +8,35 @@ from .forms import BoardForm, PinForm
 from boards.models import Board
 from .models import Pin
 
-# Home Page (Protected)
 @login_required
 def home(request):
     pins = Pin.objects.all()
+
     return render(request, 'home.html', {'pins': pins})
 
-# Register new user
 def register(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        username = request.POST.get('username').strip()
+        email = request.POST.get('email').strip()
+        password = request.POST.get('password').strip()
+        confirm_password = request.POST.get('confirm_password', '').strip()  
+
+        if not username or not email or not password:
+            messages.error(request, 'Please fill in all required fields.')
+            return redirect('register')
+
+        if confirm_password and password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+            return redirect('register')
 
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username already exists.')
             return redirect('register')
 
-        # Create new user
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email already exists.')
+            return redirect('register')
+
         user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
         messages.success(request, 'Account created successfully! You can now log in.')
@@ -33,7 +44,6 @@ def register(request):
 
     return render(request, 'register.html')
 
-# Login user
 def login_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -50,7 +60,6 @@ def login_user(request):
 
     return render(request, 'login.html')
 
-# Logout user
 def logout_user(request):
     logout(request)
     messages.success(request, 'You have been logged out.')

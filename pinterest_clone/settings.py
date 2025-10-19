@@ -57,8 +57,8 @@ ROOT_URLCONF = 'pinterest_clone.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  # you can add global templates path here if needed
-        'APP_DIRS': True,  # ✅ This must be True
+        'DIRS': [],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
