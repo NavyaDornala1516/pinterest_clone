@@ -4,15 +4,14 @@ from django.contrib.auth.models import User
 from .models import Profile
 from .forms import ProfileForm
 
-@login_required
 def view_profile(request, username):
     user = get_object_or_404(User, username=username)
-    profile, created = Profile.objects.get_or_create(user=user)
-    return render(request, 'profile/profile.html', {'profile': profile})
+    profile = Profile.objects.get(user=user)
+    return render(request, 'profileApp/profile.html', {'profile': profile, 'user': user})
 
 @login_required
 def edit_profile(request):
-    profile, created = Profile.objects.get_or_create(user=request.user)
+    profile, created = Profile.objects.get_or_create(user=request.user, defaults={'bio': ''})
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():

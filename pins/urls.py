@@ -13,4 +13,5 @@ urlpatterns = [
     path('boards/create/', views.create_board, name='create_board'),
     path('boards/', views.board_list, name='board_list'),
     path('pins/create/', views.create_pin, name='create_pin'),
+    path('delete/<int:pk>/', views.delete_pin, name='delete_pin'),
 ]

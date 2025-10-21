@@ -20,7 +20,8 @@
         <nav class="nav-links">
             <a href="/home" class="nav-item active"><i class="fa-solid fa-house"></i><span>Home</span></a>
             <a href="/pins/create/" class="nav-item"><i class="fa-solid fa-plus"></i><span>Create</span></a>
-            <a href="/boards/" class="nav-item"><i class="fa-solid fa-table-columns"></i><span>Boards</span></a>
+            <a href="{% url 'board_list' %}" class="nav-item"><i class="fa-solid fa-table-columns"></i><span>Boards</span></a>
+
             <a href="/profile/" class="nav-item"><i class="fa-solid fa-user"></i><span>Profile</span></a>
         </nav>
     </aside>

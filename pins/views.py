@@ -10,8 +10,7 @@ from .models import Pin
 
 @login_required
 def home(request):
-    pins = Pin.objects.all()
-
+    pins = Pin.objects.filter(user=request.user)  
     return render(request, 'home.html', {'pins': pins})
 
 def register(request):
@@ -112,3 +111,9 @@ def board_list(request):
 def pin_list(request):
     pins = Pin.objects.filter(user=request.user)
     return render(request, 'pins/pin_list.html', {'pins': pins})
+
+def delete_pin(request, pk):
+    pin = get_object_or_404(Pin, pk=pk)
+    if request.user == pin.owner:
+        pin.delete()
+    return redirect('home')

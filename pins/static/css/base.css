@@ -110,6 +110,7 @@ body {
   font-weight: bold;
   text-decoration: none;
   transition: background 0.3s ease;
+  font-size: 14px;
 }
 
 .logout:hover {
