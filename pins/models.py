@@ -4,6 +4,7 @@ from boards.models import Board
 
 class Pin(models.Model):
     title = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to='pins/')
     board = models.ForeignKey(Board, on_delete=models.CASCADE)

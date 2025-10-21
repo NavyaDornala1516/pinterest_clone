@@ -1,23 +1,21 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from .models import Board
-from django.contrib import messages
+from .forms import BoardForm
 
 def boards_list(request):
     boards = Board.objects.all()
     return render(request, 'boards/boards_list.html', {'boards': boards})
 
-
+@login_required
 def create_board(request):
-    if request.method == "POST":
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-
-        if not title:
-            messages.error(request, "Title is required.")
-            return render(request, 'boards/create_board.html')
-
-        Board.objects.create(title=title, description=description)
-        messages.success(request, "Board created successfully!")
-        return redirect('boards_list')  
-
-    return render(request, 'boards/create_board.html')
+    if request.method == 'POST':
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            board = form.save(commit=False)
+            board.user = request.user
+            board.save()
+            return redirect('boards_list') 
+    else:
+        form = BoardForm()
+    return render(request, 'boards/create_board.html', {'form': form}) 

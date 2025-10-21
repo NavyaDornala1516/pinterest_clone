@@ -21,8 +21,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('pins.urls')),  # include our app URLs
-    path('boards/', include('boards.urls')),  # boards URLs
+    path('', include('pins.urls')), 
+    path('boards/', include('boards.urls')), 
+    path('profile/', include('profileApp.urls')),
+
 ]
 
 if settings.DEBUG:

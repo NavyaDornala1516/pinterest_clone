@@ -72,16 +72,18 @@ def create_board(request):
         form = BoardForm(request.POST)
         if form.is_valid():
             board = form.save(commit=False)
-            board.owner = request.user
+            board.user = request.user  
             board.save()
             return redirect('boards_list')
     else:
         form = BoardForm()
     return render(request, 'boards/create_board.html', {'form': form})
 
+
 @login_required
 def create_pin(request):
-    boards = Board.objects.filter(owner=request.user)
+    boards = Board.objects.filter(user=request.user) 
+    
     if not boards.exists():
         messages.error(request, "You need to create a board first!")
         return redirect('create_board')
