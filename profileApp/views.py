@@ -4,10 +4,17 @@ from django.contrib.auth.models import User
 from .models import Profile
 from .forms import ProfileForm
 
+
 def view_profile(request, username):
-    user = get_object_or_404(User, username=username)
-    profile = Profile.objects.get(user=user)
-    return render(request, 'profileApp/profile.html', {'profile': profile, 'user': user})
+    profile = get_object_or_404(Profile, user__username=username)
+
+    saved_pins = Pin.objects.filter(saved_by=profile.user)
+
+    context = {
+        'profile': profile,
+        'saved_pins': saved_pins,
+    }
+    return render(request, 'profile.html', context)
 
 @login_required
 def edit_profile(request):

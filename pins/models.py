@@ -20,3 +20,15 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.user.username}: {self.text[:20]}"
+
+
+class Like(models.Model):
+    pin = models.ForeignKey('Pin', on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_pins')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('pin', 'user')  
+
+    def __str__(self):
+        return f"{self.user.username} liked {self.pin.title}"

@@ -15,4 +15,17 @@
   <a href="{% url 'edit_profile' %}" class="edit-btn">Edit Profile</a>
   {% endif %}
 </div>
+
+<div class="saved-pins-section">
+  <h3>Saved Pins</h3>
+  <div class="saved-pin-grid">
+    {% for pin in saved_pins %}
+    <a href="{% url 'pin_detail' pin.id %}" class="saved-pin">
+      <img src="{{ pin.image.url }}" alt="{{ pin.title }}">
+    </a>
+    {% empty %}
+    <p>No pins saved yet.</p>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

@@ -1,121 +1,207 @@
-.pin-detail-container {
-    max-width: 900px;
-    margin: 30px auto;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    overflow: hidden;
-    font-family: 'Segoe UI', sans-serif;
+.pin-detail-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  max-width: 1400px;
+  margin: 50px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.pin-top {
-    position: relative;
+.pin-left {
+  flex: 1 1 55%;
+  min-width: 500px;
 }
 
-.pin-image {
-    width: 100%;
-    display: block;
-    border-bottom: 1px solid #eee;
+.pin-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+}
+
+.pin-image-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fafafa;
+}
+
+.pin-image-box img {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  object-fit: contain; 
+  max-height: 700px;
+}
+
+.pin-info-box {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .pin-actions {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    display: flex;
-    gap: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .btn-action {
-    background: rgba(255,255,255,0.9);
-    border: none;
-    padding: 8px 12px;
-    border-radius: 24px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    transition: background 0.2s;
+  background: #f8f8f8;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 24px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 .btn-action:hover {
-    background: #e1e1e1;
+  background: #e1e1e1;
+  transform: scale(1.05);
 }
 
 .like-btn i {
-    color: #e60023;
-}
-
-.save-btn i {
-    color: #111;
-}
-
-.download-btn i {
-    color: #111;
-    text-decoration: none;
-}
-
-.pin-bottom {
-    padding: 20px;
+  color: #e60023;
+  height: 20px;
+  width: 20px;
 }
 
 .pin-user {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.username {
-    font-weight: 600;
-    font-size: 16px;
+.pin-info h2 {
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+.pin-info p {
+  color: #555;
+  line-height: 1.5;
 }
 
 .pin-comments h3 {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .pin-comments ul {
-    list-style: none;
-    margin-bottom: 10px;
-    padding-left: 0;
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 10px;
+  max-height: 250px;
+  overflow-y: auto;
 }
 
 .pin-comments li {
-    padding: 6px 0;
-    border-bottom: 1px solid #eee;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
 }
 
 .pin-comments form {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
 }
 
 .pin-comments input[type="text"] {
-    flex: 1;
-    padding: 8px 12px;
-    border-radius: 24px;
-    border: 1px solid #ccc;
-    outline: none;
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 24px;
+  border: 1px solid #ccc;
+  outline: none;
 }
 
 .pin-comments button {
-    background: #e60023;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 50%;
-    color: #fff;
-    cursor: pointer;
+  background: #e60023;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
 }
 
-.pin-comments button i {
-    font-size: 14px;
+.pin-right {
+  flex: 1 1 40%;
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pin-right h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.related-pin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.related-pin img {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  object-fit: contain; 
+  background: #fafafa;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.related-pin img:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.like-btn.liked {
+  background: rgba(230, 0, 35, 0.1);
+  color: #e60023;
+  border: 1px solid #e60023;
+}
+
+.like-btn.liked i {
+  color: #e60023;
+}
+
+
+@media (max-width: 1024px) {
+  .pin-detail-wrapper {
+    flex-direction: column;
+  }
+
+  .pin-left,
+  .pin-right {
+    min-width: 100%;
+  }
+
+  .related-pin-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .related-pin-grid {
+    grid-template-columns: 1fr;
+  }
 }

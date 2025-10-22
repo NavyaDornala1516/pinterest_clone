@@ -9,51 +9,104 @@
 {% endblock %}
 
 {% block content %}
-<div class="pin-detail-container">
-    <!-- Top section: pin + actions -->
-    <div class="pin-top">
-        <img src="{{ pin.image.url }}" alt="{{ pin.title }}" class="pin-image">
+<div class="pin-detail-wrapper">
 
+  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+  <div class="pin-left">
+    <div class="pin-card">
+      <div class="pin-image-box">
+        <img src="{{ pin.image.url }}" alt="{{ pin.title }}">
+      </div>
+
+      <div class="pin-info-box">
         <div class="pin-actions">
-            <button class="btn-action like-btn">
-                <i class="fa-regular fa-heart"></i> <span>{{ pin.likes.count }}</span>
-            </button>
-            <button class="btn-action save-btn">
-                <i class="fa-solid fa-thumbtack"></i> Save
-            </button>
-            <a href="{{ pin.image.url }}" download class="btn-action download-btn">
-                <i class="fa-solid fa-download"></i> Download
-            </a>
-        </div>
-    </div>
+          <button class="btn-action save-btn {% if user in pin.saved_by.all %}saved{% endif %}"
+            data-pin-id="{{ pin.id }}">
+            <i class="fa-solid fa-thumbtack"></i>
+            {% if user in pin.saved_by.all %}Saved{% else %}Save{% endif %}
+          </button>
 
-    <!-- Bottom section: user info + comments -->
-    <div class="pin-bottom">
-        <!-- User info -->
+
+          <a href="{{ pin.image.url }}" download class="btn-action download-btn">
+            <i class="fa-solid fa-download"></i>
+          </a>
+          <button class="btn-action save-btn">
+            <i class="fa-solid fa-thumbtack"></i> Save
+          </button>
+
+        </div>
+
         <div class="pin-user">
-            <img src="{{ pin.user.profile.profile_pic.url }}" alt="{{ pin.user.username }}" class="user-avatar">
-            <span class="username">{{ pin.user.username }}</span>
+          <span class="username">{{ pin.user.username }}</span>
         </div>
 
-        <!-- Comments -->
+        <div class="pin-info">
+          <h2>{{ pin.title }}</h2>
+          <p>{{ pin.description }}</p>
+        </div>
+
         <div class="pin-comments">
-            <h3>Comments</h3>
-            <ul>
-                {% for comment in pin.comments.all %}
-                <li>
-                    <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
-                </li>
-                {% empty %}
-                <li>No comments yet.</li>
-                {% endfor %}
-            </ul>
+          <h3>Comments</h3>
+          <ul>
+            {% for comment in pin.comments.all %}
+            <li><strong>{{ comment.user.username }}</strong>: {{ comment.text }}</li>
+            {% empty %}
+            <li>No comments yet.</li>
+            {% endfor %}
+          </ul>
 
-            <form action="{% url 'add_comment' pin.id %}" method="POST">
-                {% csrf_token %}
-                <input type="text" name="comment" placeholder="Add a comment..." required>
-                <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
-            </form>
+          <form action="{% url 'add_comment' pin.id %}" method="POST">
+            {% csrf_token %}
+            <input type="text" name="comment" placeholder="Add a comment..." required>
+            <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
+
+  <div class="pin-right">
+    <h3>More like this</h3>
+    <div class="related-pin-grid">
+      {% for p in other_pins %}
+      <a href="{% url 'pin_detail' p.id %}" class="related-pin">
+        <img src="{{ p.image.url }}" alt="{{ p.title }}">
+      </a>
+      {% empty %}
+      <p>No other pins found.</p>
+      {% endfor %}
+    </div>
+  </div>
+
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>document.querySelectorAll('.save-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const pinId = btn.dataset.pinId;
+
+        fetch(`/save/${pinId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.saved) {
+                btn.classList.add('saved');
+                btn.innerHTML = '<i class="fa-solid fa-thumbtack"></i> Saved';
+            } else {
+                btn.classList.remove('saved');
+                btn.innerHTML = '<i class="fa-solid fa-thumbtack"></i> Save';
+            }
+        })
+        .catch(err => console.error(err));
+    });
+});
+
+</script>
 {% endblock %}

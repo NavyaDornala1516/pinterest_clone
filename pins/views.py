@@ -6,7 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import BoardForm, PinForm
 from boards.models import Board
-from .models import Pin
+from .models import Pin, Comment, Like
+from django.http import JsonResponse
+
 
 @login_required
 def home(request):
@@ -118,25 +120,74 @@ def delete_pin(request, pk):
         pin.delete()
     return redirect('home')
 
-def pin_detail(request, pk):
-    pin = get_object_or_404(Pin, pk=pk)
-    
-    related_pins = Pin.objects.exclude(pk=pk)[:6]
+def pin_detail(request, pin_id):
+    pin = get_object_or_404(Pin, id=pin_id)
+    other_pins = Pin.objects.exclude(id=pin.id)[:10]
 
-    comments = []  
+    liked_by_user = pin.likes.filter(user=request.user).exists() if request.user.is_authenticated else False
 
     context = {
         'pin': pin,
-        'related_pins': related_pins,
-        'comments': comments,
+        'other_pins': other_pins,
+        'liked_by_user': liked_by_user,
     }
     return render(request, 'pins/pin_detail.html', context)
 
+
 @login_required
 def add_comment(request, pin_id):
-    if request.method == 'POST':
-        pin = get_object_or_404(Pin, id=pin_id)
-        text = request.POST.get('comment')
+    pin = get_object_or_404(Pin, id=pin_id)
+
+    if request.method == "POST":
+        text = request.POST.get("comment")
         if text:
-            Comment.objects.create(user=request.user, pin=pin, text=text)
+            Comment.objects.create(
+                pin=pin,
+                user=request.user,
+                text=text
+            )
     return redirect('pin_detail', pin_id=pin_id)
+
+
+@login_required
+def toggle_like(request, pin_id):
+    pin = get_object_or_404(Pin, id=pin_id)
+    user = request.user
+
+    existing_like = Like.objects.filter(pin=pin, user=user).first()
+
+    if existing_like:
+        existing_like.delete()
+        liked = False
+    else:
+        Like.objects.create(pin=pin, user=user)
+        liked = True
+
+    pin.refresh_from_db()
+
+    return JsonResponse({
+        'liked': liked,
+        'likes_count': pin.likes.count()
+    })
+
+
+@login_required
+def save_pin(request, pin_id):
+    pin = get_object_or_404(Pin, id=pin_id)
+    if request.user in pin.saved_by.all():
+        pin.saved_by.remove(request.user)
+        saved = False
+    else:
+        pin.saved_by.add(request.user)
+        saved = True
+    return JsonResponse({'saved': saved})
+
+
+def profile_view(request, username):
+    profile = get_object_or_404(Profile, user__username=username)
+    saved_pins = profile.user.saved_pins.all()  
+    context = {
+        'profile': profile,
+        'saved_pins': saved_pins,
+    }
+    return render(request, 'profile.html', context)
