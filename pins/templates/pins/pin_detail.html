@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ pin.title }} | Pin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pindetail.css' %}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="pin-detail-container">
+    <!-- Top section: pin + actions -->
+    <div class="pin-top">
+        <img src="{{ pin.image.url }}" alt="{{ pin.title }}" class="pin-image">
+
+        <div class="pin-actions">
+            <button class="btn-action like-btn">
+                <i class="fa-regular fa-heart"></i> <span>{{ pin.likes.count }}</span>
+            </button>
+            <button class="btn-action save-btn">
+                <i class="fa-solid fa-thumbtack"></i> Save
+            </button>
+            <a href="{{ pin.image.url }}" download class="btn-action download-btn">
+                <i class="fa-solid fa-download"></i> Download
+            </a>
+        </div>
+    </div>
+
+    <!-- Bottom section: user info + comments -->
+    <div class="pin-bottom">
+        <!-- User info -->
+        <div class="pin-user">
+            <img src="{{ pin.user.profile.profile_pic.url }}" alt="{{ pin.user.username }}" class="user-avatar">
+            <span class="username">{{ pin.user.username }}</span>
+        </div>
+
+        <!-- Comments -->
+        <div class="pin-comments">
+            <h3>Comments</h3>
+            <ul>
+                {% for comment in pin.comments.all %}
+                <li>
+                    <strong>{{ comment.user.username }}</strong>: {{ comment.text }}
+                </li>
+                {% empty %}
+                <li>No comments yet.</li>
+                {% endfor %}
+            </ul>
+
+            <form action="{% url 'add_comment' pin.id %}" method="POST">
+                {% csrf_token %}
+                <input type="text" name="comment" placeholder="Add a comment..." required>
+                <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

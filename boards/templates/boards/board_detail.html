@@ -1,20 +1,28 @@
 {% extends 'base.html' %}
+{% load static %}  
 
 {% block title %}{{ board.name }} | Pins{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/board_detail.css' %}">
+{% endblock %}
+
 {% block content %}
-<h2>{{ board.name }}</h2>
+<h2>{{ board.name }}</h2> 
 
 {% if pins %}
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+<div class="grid-container">
   {% for pin in pins %}
     <div class="pin-card">
-      <img src="{{ pin.image.url }}" alt="{{ pin.title }}">
+      <a href="{% url 'pin_detail' pin.pk %}">
+        <img src="{{ pin.image.url }}" alt="{{ pin.title }}">
+      </a>
       <p>{{ pin.title }}</p>
     </div>
   {% endfor %}
 </div>
 {% else %}
-<p>No pins in this board yet.</p>
+<p style="text-align:center;">No pins in this board yet.</p>
 {% endif %}
+
 {% endblock %}

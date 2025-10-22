@@ -14,4 +14,6 @@ urlpatterns = [
     path('boards/', views.board_list, name='board_list'),
     path('pins/create/', views.create_pin, name='create_pin'),
     path('delete/<int:pk>/', views.delete_pin, name='delete_pin'),
+    path('pin/<int:pk>/', views.pin_detail, name='pin_detail'),
+    path('pin/<int:pin_id>/add_comment/', views.add_comment, name='add_comment'),
 ]

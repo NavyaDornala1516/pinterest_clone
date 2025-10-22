@@ -117,3 +117,26 @@ def delete_pin(request, pk):
     if request.user == pin.owner:
         pin.delete()
     return redirect('home')
+
+def pin_detail(request, pk):
+    pin = get_object_or_404(Pin, pk=pk)
+    
+    related_pins = Pin.objects.exclude(pk=pk)[:6]
+
+    comments = []  
+
+    context = {
+        'pin': pin,
+        'related_pins': related_pins,
+        'comments': comments,
+    }
+    return render(request, 'pins/pin_detail.html', context)
+
+@login_required
+def add_comment(request, pin_id):
+    if request.method == 'POST':
+        pin = get_object_or_404(Pin, id=pin_id)
+        text = request.POST.get('comment')
+        if text:
+            Comment.objects.create(user=request.user, pin=pin, text=text)
+    return redirect('pin_detail', pin_id=pin_id)
